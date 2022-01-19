@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>pybasic._background &mdash; BaSiCPy main documentation</title>
+<link rel="stylesheet" href="../../_static/css/scanpy.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
+
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "tex2jax_ignore|mathjax_ignore|document", "processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
+    <script src="../../_static/js/theme.js"></script>
+
+
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+ 
+
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html"><img src="../../_static/BaSiC.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">General</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release_notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../references.html">References</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">BaSiCPy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>pybasic._background</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pybasic._background</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Created on Mon Aug 10 18:53:07 2020</span>
+
+<span class="sd">@author: mohammad.mirkazemi</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">._settings</span> <span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">.tools._resize</span> <span class="kn">import</span> <span class="n">_resize_images_list</span><span class="p">,</span> <span class="n">_resize_image</span>
+<span class="kn">from</span> <span class="nn">.tools._dct2d_tools</span> <span class="kn">import</span> <span class="n">dct2d</span>
+<span class="kn">from</span> <span class="nn">.tools.inexact_alm_rspca_l1</span> <span class="kn">import</span> <span class="n">inexact_alm_rspca_l1</span>
+
+<div class="viewcode-block" id="background_timelapse"><a class="viewcode-back" href="../../api/pybasic.background_timelapse.html#pybasic.background_timelapse">[docs]</a><span class="k">def</span> <span class="nf">background_timelapse</span><span class="p">(</span>
+        <span class="n">images_list</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span>
+        <span class="n">flatfield</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">darkfield</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">verbosity</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes the baseline drift for the input images and returns a numpy 1D array</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    ----------</span>
+<span class="sd">    images_list : list</span>
+<span class="sd">        A list of 2D arrays as the list of input images. The list can be provided by </span>
+<span class="sd">        using pybasic.load_data() function.</span>
+<span class="sd">        </span>
+<span class="sd">    flatfield : numpy 2D array</span>
+<span class="sd">        A flatfield image for input images with the same shape as them. The flatfield </span>
+<span class="sd">        image may be calculated using pybasic.basic() function.</span>
+<span class="sd">        </span>
+<span class="sd">    darkfield : numpy 2D array, optional</span>
+<span class="sd">        A darkfield image for input images with the same shape as them. The darkfield </span>
+<span class="sd">        image may be calculated using the `pybasic.basic()` function.</span>
+<span class="sd">        </span>
+<span class="sd">    verbosity : Boolean</span>
+<span class="sd">        If True the reweighting iteration number is printed (default is True).  </span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">        A 1d numpy array containing baseline drift for each input image. The length of </span>
+<span class="sd">        the array equals the length of the list of input images. </span>
+<span class="sd">            </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_value</span><span class="p">)</span>
+
+    <span class="n">nrows</span> <span class="o">=</span> <span class="n">ncols</span> <span class="o">=</span> <span class="n">_working_size</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">working_size</span>
+
+    <span class="c1"># Reszing</span>
+    <span class="c1"># cv2.INTER_LINEAR is not exactly the same method as &#39;bilinear&#39; in MATLAB</span>
+    
+    <span class="n">resized_images</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">_resize_images_list</span><span class="p">(</span><span class="n">images_list</span><span class="o">=</span><span class="n">images_list</span><span class="p">,</span> <span class="n">side_size</span><span class="o">=</span><span class="n">_working_size</span><span class="p">))</span>
+    <span class="n">resized_images</span> <span class="o">=</span> <span class="n">resized_images</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">nrows</span> <span class="o">*</span> <span class="n">nrows</span><span class="p">],</span> <span class="n">order</span> <span class="o">=</span> <span class="s1">&#39;F&#39;</span><span class="p">)</span>
+
+    <span class="n">resized_flatfield</span> <span class="o">=</span> <span class="n">_resize_image</span><span class="p">(</span><span class="n">image</span> <span class="o">=</span> <span class="n">flatfield</span><span class="p">,</span> <span class="n">side_size</span> <span class="o">=</span> <span class="n">_working_size</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">darkfield</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">resized_darkfield</span> <span class="o">=</span> <span class="n">_resize_image</span><span class="p">(</span><span class="n">image</span> <span class="o">=</span> <span class="n">darkfield</span><span class="p">,</span> <span class="n">side_size</span> <span class="o">=</span> <span class="n">_working_size</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">resized_darkfield</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">resized_flatfield</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+            
+    <span class="n">_weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">resized_images</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">eplson</span> <span class="o">=</span> <span class="mf">0.1</span>
+    <span class="n">tol</span> <span class="o">=</span> <span class="mf">1e-6</span>
+    <span class="k">for</span> <span class="n">reweighting_iter</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">6</span><span class="p">):</span>
+        <span class="n">W_idct_hat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">resized_flatfield</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">)</span>
+        <span class="n">A_offset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">resized_darkfield</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">)</span>
+        <span class="n">A1_coeff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">resized_images</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="c1"># main iteration loop starts:</span>
+        <span class="c1"># The first element of the second array of np.linalg.svd</span>
+        <span class="n">_temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">resized_images</span><span class="p">,</span> <span class="n">full_matrices</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">norm_two</span> <span class="o">=</span> <span class="n">_temp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">mu</span> <span class="o">=</span> <span class="mf">12.5</span><span class="o">/</span><span class="n">norm_two</span> <span class="c1"># this one can be tuned</span>
+        <span class="n">mu_bar</span> <span class="o">=</span> <span class="n">mu</span> <span class="o">*</span> <span class="mf">1e7</span>
+        <span class="n">rho</span> <span class="o">=</span> <span class="mf">1.5</span> <span class="c1"># this one can be tuned</span>
+        <span class="n">d_norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">resized_images</span><span class="p">,</span> <span class="nb">ord</span> <span class="o">=</span> <span class="s1">&#39;fro&#39;</span><span class="p">)</span>
+        <span class="n">ent1</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">_iter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">total_svd</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">converged</span> <span class="o">=</span> <span class="kc">False</span><span class="p">;</span>
+        <span class="n">A1_hat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">resized_images</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">E1_hat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">resized_images</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">Y1</span> <span class="o">=</span> <span class="mi">0</span>
+            
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">converged</span><span class="p">:</span>
+            <span class="n">_iter</span> <span class="o">=</span> <span class="n">_iter</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">A1_hat</span> <span class="o">=</span> <span class="n">W_idct_hat</span> <span class="o">*</span> <span class="n">A1_coeff</span> <span class="o">+</span> <span class="n">A_offset</span>
+
+            <span class="c1"># update E1 using l0 norm</span>
+            <span class="n">E1_hat</span> <span class="o">=</span> <span class="n">E1_hat</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">((</span><span class="n">resized_images</span> <span class="o">-</span> <span class="n">A1_hat</span> <span class="o">-</span> <span class="n">E1_hat</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">mu</span><span class="p">)</span><span class="o">*</span><span class="n">Y1</span><span class="p">),</span> <span class="n">ent1</span><span class="p">)</span>
+            <span class="n">E1_hat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">E1_hat</span> <span class="o">-</span> <span class="n">_weights</span><span class="o">/</span><span class="p">(</span><span class="n">ent1</span><span class="o">*</span><span class="n">mu</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span>\
+                     <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">E1_hat</span> <span class="o">+</span> <span class="n">_weights</span><span class="o">/</span><span class="p">(</span><span class="n">ent1</span><span class="o">*</span><span class="n">mu</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="c1"># update A1_coeff, A2_coeff and A_offset</span>
+            <span class="c1">#if coeff_flag</span>
+            
+            <span class="n">R1</span> <span class="o">=</span> <span class="n">resized_images</span> <span class="o">-</span> <span class="n">E1_hat</span>
+            <span class="n">A1_coeff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">R1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">A_offset</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="n">A1_coeff</span><span class="p">[</span><span class="n">A1_coeff</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                
+            <span class="n">Z1</span> <span class="o">=</span> <span class="n">resized_images</span> <span class="o">-</span> <span class="n">A1_hat</span> <span class="o">-</span> <span class="n">E1_hat</span>
+
+            <span class="n">Y1</span> <span class="o">=</span> <span class="n">Y1</span> <span class="o">+</span> <span class="n">mu</span><span class="o">*</span><span class="n">Z1</span>
+
+            <span class="n">mu</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">mu</span><span class="o">*</span><span class="n">rho</span><span class="p">,</span> <span class="n">mu_bar</span><span class="p">)</span>
+                
+            <span class="c1"># stop Criterion  </span>
+            <span class="n">stopCriterion</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">Z1</span><span class="p">,</span> <span class="nb">ord</span> <span class="o">=</span> <span class="s1">&#39;fro&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="n">d_norm</span>
+            <span class="c1"># print(stopCriterion, tol)</span>
+            <span class="k">if</span> <span class="n">stopCriterion</span> <span class="o">&lt;</span> <span class="n">tol</span><span class="p">:</span>
+                <span class="n">converged</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="c1"># if total_svd % 10 == 0:</span>
+            <span class="c1">#     print(&#39;stop&#39;)</span>
+                
+        <span class="c1"># updating weight</span>
+        <span class="c1"># XE_norm = E1_hat / np.mean(A1_hat)</span>
+        <span class="n">XE_norm</span> <span class="o">=</span> <span class="n">E1_hat</span>
+        <span class="n">mean_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">A1_hat</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">verbosity</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;reweighting_iter:&quot;</span><span class="p">,</span> <span class="n">reweighting_iter</span><span class="p">)</span>
+        <span class="n">XE_norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">mean_vec</span><span class="p">,</span> <span class="p">(</span><span class="n">nrows</span> <span class="o">*</span> <span class="n">nrows</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span> <span class="o">/</span> <span class="p">(</span><span class="n">XE_norm</span> <span class="o">+</span> <span class="mf">1e-6</span><span class="p">)</span>
+        <span class="n">_weights</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">XE_norm</span><span class="p">)</span><span class="o">+</span><span class="n">eplson</span><span class="p">)</span>
+
+        <span class="n">_weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">_weights</span><span class="p">,</span> <span class="n">_weights</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">_weights</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">_weights</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">A1_coeff</span><span class="p">)</span> </div>
+
+
+<div class="viewcode-block" id="basic"><a class="viewcode-back" href="../../api/pybasic.basic.html#pybasic.basic">[docs]</a><span class="k">def</span> <span class="nf">basic</span><span class="p">(</span><span class="n">images_list</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span> <span class="n">segmentation</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">verbosity</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes the illumination background for a list of input images and returns flatfield </span>
+<span class="sd">    and darkfield images. The input images should be monochromatic and multi-channel images </span>
+<span class="sd">    should be separated, and each channel corrected separately.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    ----------</span>
+<span class="sd">    images_list : list</span>
+<span class="sd">        A list of 2D arrays as the list of input images. The list may be provided by u</span>
+<span class="sd">        sing the `pybasic.load_data()` function.</span>
+<span class="sd">        </span>
+<span class="sd">    darkfield : boolean</span>
+<span class="sd">        If True then darkfield is also computed (default is False).</span>
+<span class="sd">        </span>
+<span class="sd">    verbosity : Boolean</span>
+<span class="sd">        If True the reweighting iteration number is printed (default is True).  </span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    flatfield : numpy 2D array</span>
+<span class="sd">        Flatfield image of the calculated illumination with the same size of input numpy arrays.</span>
+<span class="sd">        </span>
+<span class="sd">    darkfield : numpy 2D array</span>
+<span class="sd">        Darkfield image of the calculated illumination with the same size of input numpy array. </span>
+<span class="sd">        If the darkfield argument of the function is set to False, then an array of zeros with </span>
+<span class="sd">        the same shape of input arrays is returned.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_value</span><span class="p">)</span>
+
+    <span class="n">nrows</span> <span class="o">=</span> <span class="n">ncols</span> <span class="o">=</span> <span class="n">_working_size</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">working_size</span>
+    
+    <span class="n">_saved_size</span> <span class="o">=</span> <span class="n">images_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dstack</span><span class="p">(</span><span class="n">_resize_images_list</span><span class="p">(</span><span class="n">images_list</span><span class="o">=</span><span class="n">images_list</span><span class="p">,</span> <span class="n">side_size</span><span class="o">=</span><span class="n">_working_size</span><span class="p">))</span>
+
+    <span class="n">meanD</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">meanD</span> <span class="o">=</span> <span class="n">meanD</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">meanD</span><span class="p">)</span>
+    <span class="n">W_meanD</span> <span class="o">=</span> <span class="n">dct2d</span><span class="p">(</span><span class="n">meanD</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">lambda_flatfield</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s1">&#39;lambda_flatfield&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">W_meanD</span><span class="p">))</span> <span class="o">/</span> <span class="mi">400</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">lambda_darkfield</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s1">&#39;lambda_darkfield&#39;</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">lambda_flatfield</span> <span class="o">*</span> <span class="mf">0.2</span><span class="p">)</span>
+
+    <span class="c1"># TODO: Ask Tingying whether to keep sorting? I remember the sorting caused some problems with some data.</span>
+    <span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">XAoffset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nrows</span><span class="p">,</span> <span class="n">ncols</span><span class="p">))</span>
+    <span class="n">weight</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">D</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">segmentation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">segmentation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">segmentation</span><span class="p">)</span>
+        <span class="n">segmentation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">segmentation</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">weight</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]):</span>
+            <span class="n">weight</span><span class="p">[</span><span class="n">segmentation</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e-6</span>
+        <span class="c1"># weight[options.segmentation] = 1e-6</span>
+
+    <span class="n">reweighting_iter</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">flag_reweighting</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">flatfield_last</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">nrows</span><span class="p">,</span> <span class="n">ncols</span><span class="p">))</span>
+    <span class="n">darkfield_last</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">ncols</span><span class="p">)</span>
+
+    <span class="k">while</span> <span class="n">flag_reweighting</span><span class="p">:</span>
+        <span class="n">reweighting_iter</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">verbosity</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;reweighting_iter:&quot;</span><span class="p">,</span> <span class="n">reweighting_iter</span><span class="p">)</span>
+        <span class="n">initial_flatfield</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">initial_flatfield</span><span class="p">:</span>
+            <span class="c1"># TODO: implement inexact_alm_rspca_l1_intflat?</span>
+            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s1">&#39;Initial flatfield option not implemented yet!&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">X_k_A</span><span class="p">,</span> <span class="n">X_k_E</span><span class="p">,</span> <span class="n">X_k_Aoffset</span> <span class="o">=</span> <span class="n">inexact_alm_rspca_l1</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">);</span>
+        <span class="n">XA</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">X_k_A</span><span class="p">,</span> <span class="p">[</span><span class="n">nrows</span><span class="p">,</span> <span class="n">ncols</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">)</span>
+        <span class="n">XE</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">X_k_E</span><span class="p">,</span> <span class="p">[</span><span class="n">nrows</span><span class="p">,</span> <span class="n">ncols</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">)</span>
+        <span class="n">XAoffset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">X_k_Aoffset</span><span class="p">,</span> <span class="p">[</span><span class="n">nrows</span><span class="p">,</span> <span class="n">ncols</span><span class="p">],</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">)</span>
+        <span class="n">XE_norm</span> <span class="o">=</span> <span class="n">XE</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">XA</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="c1"># Update the weights:</span>
+        <span class="n">weight</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">XE_norm</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">XE_norm</span><span class="p">)</span> <span class="o">+</span> <span class="n">settings</span><span class="o">.</span><span class="n">eplson</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">segmentation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">weight</span><span class="p">[</span><span class="n">segmentation</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">weight</span> <span class="o">=</span> <span class="n">weight</span> <span class="o">*</span> <span class="n">weight</span><span class="o">.</span><span class="n">size</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">weight</span><span class="p">)</span>
+
+        <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">XA</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">XAoffset</span>
+        <span class="n">flatfield_current</span> <span class="o">=</span> <span class="n">temp</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+        <span class="n">darkfield_current</span> <span class="o">=</span> <span class="n">XAoffset</span>
+        <span class="n">mad_flatfield</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">flatfield_current</span> <span class="o">-</span> <span class="n">flatfield_last</span><span class="p">))</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">flatfield_last</span><span class="p">))</span>
+        <span class="n">temp_diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">darkfield_current</span> <span class="o">-</span> <span class="n">darkfield_last</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">temp_diff</span> <span class="o">&lt;</span> <span class="mf">1e-7</span><span class="p">:</span>
+            <span class="n">mad_darkfield</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">mad_darkfield</span> <span class="o">=</span> <span class="n">temp_diff</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">darkfield_last</span><span class="p">)),</span> <span class="mf">1e-6</span><span class="p">)</span>
+        <span class="n">flatfield_last</span> <span class="o">=</span> <span class="n">flatfield_current</span>
+        <span class="n">darkfield_last</span> <span class="o">=</span> <span class="n">darkfield_current</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">mad_flatfield</span><span class="p">,</span>
+                      <span class="n">mad_darkfield</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">settings</span><span class="o">.</span><span class="n">reweight_tolerance</span> <span class="ow">or</span> \
+                <span class="n">reweighting_iter</span> <span class="o">&gt;=</span> <span class="n">settings</span><span class="o">.</span><span class="n">max_reweight_iterations</span><span class="p">:</span>
+            <span class="n">flag_reweighting</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="n">shading</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">XA</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">XAoffset</span>
+
+    <span class="n">flatfield</span> <span class="o">=</span> <span class="n">_resize_image</span><span class="p">(</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">shading</span><span class="p">,</span> 
+        <span class="n">x_side_size</span> <span class="o">=</span> <span class="n">_saved_size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> 
+        <span class="n">y_side_size</span> <span class="o">=</span> <span class="n">_saved_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">flatfield</span> <span class="o">=</span> <span class="n">flatfield</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">flatfield</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">darkfield</span><span class="p">:</span>
+        <span class="n">darkfield</span> <span class="o">=</span> <span class="n">_resize_image</span><span class="p">(</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="n">XAoffset</span><span class="p">,</span> 
+            <span class="n">x_side_size</span> <span class="o">=</span> <span class="n">_saved_size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> 
+            <span class="n">y_side_size</span> <span class="o">=</span> <span class="n">_saved_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">darkfield</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">flatfield</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">flatfield</span><span class="p">,</span> <span class="n">darkfield</span></div>
+
+<div class="viewcode-block" id="correct_illumination"><a class="viewcode-back" href="../../api/pybasic.correct_illumination.html#pybasic.correct_illumination">[docs]</a><span class="k">def</span> <span class="nf">correct_illumination</span><span class="p">(</span>
+    <span class="n">images_list</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span> 
+    <span class="n">flatfield</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
+    <span class="n">darkfield</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">background_timelapse</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Applies the illumination correction on a list of input images </span>
+<span class="sd">    and returns a list of corrected images.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    images_list : list</span>
+
+<span class="sd">        A list of 2D arrays as the list of input images. The list can be provided by using pybasic.load_data() function.</span>
+<span class="sd">        </span>
+<span class="sd">    flatfield : numpy 2D array</span>
+
+<span class="sd">        A flatfield image for input images with the same shape as them. The flatfield image may be calculated using pybasic.basic() function.</span>
+<span class="sd">        </span>
+<span class="sd">    darkfield : numpy 2D array, optional</span>
+
+<span class="sd">        A darkfield image for input images with the same shape as them. The darkfield image may be calculated using the `pybasic.basic()` function.</span>
+
+<span class="sd">    background_timelapse : numpy 1D array or a list, optional</span>
+<span class="sd">        Timelapse background or baseline drift of the images in the same order as images in the input list. The lenght of background_timelapse should be as the same as the length of list of input images.</span>
+
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">        A list of illumination corrected images with the same length of list of input images.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_saved_size</span> <span class="o">=</span> <span class="n">images_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+    
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">flatfield</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">_saved_size</span><span class="p">:</span>
+        <span class="n">flatfield</span> <span class="o">=</span> <span class="n">_resize_image</span><span class="p">(</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="n">flatfield</span><span class="p">,</span> 
+            <span class="n">x_side_size</span> <span class="o">=</span> <span class="n">_saved_size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> 
+            <span class="n">y_side_size</span> <span class="o">=</span> <span class="n">_saved_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">darkfield</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">corrected_images</span> <span class="o">=</span> <span class="p">[</span><span class="n">_im</span> <span class="o">/</span> <span class="n">flatfield</span> <span class="k">for</span> <span class="n">_im</span> <span class="ow">in</span> <span class="n">images_list</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">darkfield</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">_saved_size</span><span class="p">:</span>
+            <span class="n">darkfield</span> <span class="o">=</span> <span class="n">_resize_image</span><span class="p">(</span>
+                <span class="n">image</span> <span class="o">=</span> <span class="n">darkfield</span><span class="p">,</span> 
+                <span class="n">x_side_size</span> <span class="o">=</span> <span class="n">_saved_size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> 
+                <span class="n">y_side_size</span> <span class="o">=</span> <span class="n">_saved_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="p">)</span>
+        <span class="n">corrected_images</span> <span class="o">=</span> <span class="p">[(</span><span class="n">_im</span>  <span class="o">-</span> <span class="n">darkfield</span><span class="p">)</span><span class="o">/</span> <span class="n">flatfield</span> <span class="k">for</span> <span class="n">_im</span> <span class="ow">in</span> <span class="n">images_list</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">background_timelapse</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">background_timelapse</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">corrected_images</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: background_timelapse and input images should have the same lenght.&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">bg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">background_timelapse</span><span class="p">):</span>
+            <span class="n">corrected_images</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">corrected_images</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">bg</span>
+
+    <span class="k">return</span> <span class="n">corrected_images</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, PengLab.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
