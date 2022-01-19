@@ -1,3 +1,5 @@
 sphinx-gallery>=0.10.1
 GitPython>=3.1.18
 pyenchant>=3.2.2
+
+Sphinx==3.1.2
