@@ -65,7 +65,7 @@ We are happy about any contributions! Before you start, check out our `contribut
     tutorials
     examples
 
-.. |Docs| image:: https://img.shields.io/readthedocs/pybasic
+.. |Docs| image:: https://img.shields.io/readthedocs/basicpy-rtd
     :target: https://pybasic.readthedocs.io/en/latest/
     :alt: Documentation
     
